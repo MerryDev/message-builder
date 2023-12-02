@@ -1,6 +1,9 @@
+import io.freefair.gradle.plugins.lombok.LombokPlugin
+
 plugins {
     java
     `java-library`
+    id("io.freefair.lombok") version "8.4"
 }
 
 group = "net.quantrax"
@@ -23,6 +26,7 @@ subprojects {
     apply {
         plugin<JavaPlugin>()
         plugin<JavaLibraryPlugin>()
+        plugin<LombokPlugin>()
     }
 
     java {
