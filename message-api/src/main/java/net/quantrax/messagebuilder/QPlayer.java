@@ -6,8 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents a simple abstract version of a quantrax.net player based on the needs for this library
  */
-public interface QPlayer<T> {
-
+public interface QPlayer {
 
 	/**
 	 * Returns the currently selected language
