@@ -58,3 +58,8 @@ Language language=player.language(); // Gets the selected language
 
 MessageBuilder.builder().language(language).message(messageKey).send(player); // Sends the message directly to the player without explictily defining the message a component
 ```
+
+___
+
+## Additional
+You have to shade this library into your project.
