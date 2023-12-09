@@ -6,11 +6,9 @@ import de.chojo.sadu.datasource.DataSourceCreator;
 
 public class StaticSaduLoader {
 
-	public static HikariDataSource start(Credentials properties) {
+	public static void start(Credentials properties) {
 		final HikariDataSource source = createSource(properties);
 		StaticQueryAdapter.start(source);
-
-		return source;
 	}
 
 	private static HikariDataSource createSource(Credentials properties) {

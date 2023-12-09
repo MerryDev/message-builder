@@ -18,7 +18,6 @@ public class MessageBuilderImpl implements MessageBuilder {
 
 	private static final Logger LOGGER = Logger.getLogger(MessageBuilderImpl.class.getName());
 	private static final Optional<Provider> SERVICE = Services.service(Provider.class);
-	private HikariDataSource hikariDataSource;
 	private final Map<Language, List<Message>> localizedMessages = new HashMap<>();
 
 	@Override
@@ -36,17 +35,12 @@ public class MessageBuilderImpl implements MessageBuilder {
 					properties.getProperty("password", "")
 			);
 
-			this.hikariDataSource = StaticSaduLoader.start(credentials);
+			StaticSaduLoader.start(credentials);
 			this.fetchMessages();
 
 		} catch (IOException exception) {
 			LOGGER.severe("Could not load config.properties file. MessageBuilder will not work.");
 		}
-	}
-
-	@Override
-	public void destroy() {
-		this.hikariDataSource.close();
 	}
 
 	@Override
@@ -59,11 +53,6 @@ public class MessageBuilderImpl implements MessageBuilder {
 		final Language suitableLanguage = Language.fromLocale(player.locale());
 
 		return new LanguageStage(suitableLanguage, this.localizedMessages.getOrDefault(suitableLanguage, Collections.emptyList()));
-	}
-
-	@Override
-	public @NotNull Map<Language, List<Message>> localizedMessages() {
-		return this.localizedMessages;
 	}
 
 	private void fetchMessages() {
