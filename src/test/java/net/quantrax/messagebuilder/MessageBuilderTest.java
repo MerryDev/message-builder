@@ -3,6 +3,8 @@ package net.quantrax.messagebuilder;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -70,6 +72,14 @@ public class MessageBuilderTest {
 		final List<Message> englishMessages = MessageBuilder.messageBuilder().localizedMessages().get(Language.ENGLISH);
 
 		assertFalse(englishMessages.isEmpty(), "There was no english message found.");
+	}
+
+	@Test
+	void confirmResolving() {
+		final Component expected = MiniMessage.miniMessage().deserialize("<red>Test<red>");
+		final Component actual = MessageBuilder.messageBuilder().localized(player).message("test.test");
+
+		assertEquals(expected, actual, "The resolved component does not match with the expectation.");
 	}
 
 }
