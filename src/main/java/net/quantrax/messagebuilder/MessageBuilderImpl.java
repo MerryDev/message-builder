@@ -19,10 +19,7 @@ public class MessageBuilderImpl implements MessageBuilder {
 
 	private static final Logger LOGGER = Logger.getLogger(MessageBuilderImpl.class.getName());
 	private static final Optional<Provider> SERVICE = Services.service(Provider.class);
-
-	@ApiStatus.Internal
 	private HikariDataSource hikariDataSource;
-
 	private final Map<Language, List<Message>> localizedMessages = new HashMap<>();
 
 	@Override
@@ -65,6 +62,11 @@ public class MessageBuilderImpl implements MessageBuilder {
 		return new LanguageStage(suitableLanguage);
 	}
 
+	@Override
+	public @NotNull Map<Language, List<Message>> localizedMessages() {
+		return this.localizedMessages;
+	}
+
 	private void fetchMessages() {
 		for (Language language : Language.values()) {
 			Language.messages(language)
@@ -73,7 +75,6 @@ public class MessageBuilderImpl implements MessageBuilder {
 						LOGGER.severe(throwable.getLocalizedMessage());
 						return Collections.emptyList();
 					});
-
 		}
 	}
 
