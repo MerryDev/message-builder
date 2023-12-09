@@ -5,6 +5,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Map;
+
 public interface MessageBuilder {
 
 	static @NotNull MessageBuilder messageBuilder() {
@@ -16,6 +19,9 @@ public interface MessageBuilder {
 
 	@ApiStatus.Internal
 	void destroy();
+
+	@ApiStatus.Internal
+	@NotNull Map<Language, List<Message>> localizedMessages();
 
 	@NotNull LanguageStage language(@NotNull Language language);
 

@@ -5,31 +5,28 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MessageBuilderTest {
 
-	private static MessageBuilder messageBuilder;
-	private ServerMock server;
 	private PlayerMock player;
 
 	@BeforeAll
 	static void setup() {
-		messageBuilder = MessageBuilder.messageBuilder();
-		messageBuilder.setup();
+		MessageBuilder.messageBuilder().setup();
 	}
 
 	@AfterAll
 	static void destroy() {
-		messageBuilder.destroy();
+		MessageBuilder.messageBuilder().destroy();
 	}
 
 	@BeforeEach
 	void setUp() {
-		server = MockBukkit.mock();
+		ServerMock server = MockBukkit.mock();
 		player = server.addPlayer();
 
 		player.setLocale(Locale.ENGLISH);
@@ -42,13 +39,13 @@ public class MessageBuilderTest {
 
 	@Test
 	void initDoesNotFail() {
-		assertNotNull(messageBuilder, "The MessageBuilder instance is null");
+		assertNotNull(MessageBuilder.messageBuilder(), "The MessageBuilder instance is null");
 	}
 
 	@Test
 	void languageIsGerman() {
 		Language expected = Language.GERMAN;
-		Language actual = messageBuilder.language(Language.GERMAN).language();
+		Language actual = MessageBuilder.messageBuilder().language(Language.GERMAN).language();
 
 		assertEquals(expected, actual, "The manually selected language does not match with the expected language. Expected: %s, actual: %s".formatted(expected, actual));
 	}
@@ -56,9 +53,23 @@ public class MessageBuilderTest {
 	@Test
 	void localizedIsEnglish() {
 		Language expected = Language.ENGLISH;
-		Language actual = messageBuilder.localized(player).language();
+		Language actual = MessageBuilder.messageBuilder().localized(player).language();
 
 		assertEquals(expected, actual, "The auto-fetched language from the player does not match with the expected language. Expected: %s, actual: %s".formatted(expected, actual));
+	}
+
+	@Test
+	void noGermanMessagesFetched() {
+		final List<Message> germanMessages = MessageBuilder.messageBuilder().localizedMessages().get(Language.GERMAN);
+
+		assertTrue(germanMessages.isEmpty(), "German messages were found.");
+	}
+
+	@Test
+	void englishMessagesFound() {
+		final List<Message> englishMessages = MessageBuilder.messageBuilder().localizedMessages().get(Language.ENGLISH);
+
+		assertFalse(englishMessages.isEmpty(), "There was no english message found.");
 	}
 
 }
