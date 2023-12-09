@@ -3,10 +3,7 @@ package net.quantrax.messagebuilder;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Locale;
 
@@ -19,21 +16,28 @@ public class MessageBuilderTest {
 	private ServerMock server;
 	private PlayerMock player;
 
+	@BeforeAll
+	static void setup() {
+		messageBuilder = MessageBuilder.messageBuilder();
+		messageBuilder.setup();
+	}
+
+	@AfterAll
+	static void destroy() {
+		messageBuilder.destroy();
+	}
+
 	@BeforeEach
 	void setUp() {
 		server = MockBukkit.mock();
 		player = server.addPlayer();
 
 		player.setLocale(Locale.ENGLISH);
-
-		messageBuilder = MessageBuilder.messageBuilder();
-		messageBuilder.setup();
 	}
 
 	@AfterEach
 	void tearDown() {
 		MockBukkit.unmock();
-		messageBuilder.destroy();
 	}
 
 	@Test
