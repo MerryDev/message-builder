@@ -25,16 +25,14 @@ public class MessageBuilderTest {
 		player = server.addPlayer();
 
 		player.setLocale(Locale.ENGLISH);
+
+		messageBuilder = MessageBuilder.messageBuilder();
+		messageBuilder.setup();
 	}
 
 	@AfterEach
 	void tearDown() {
 		MockBukkit.unmock();
-	}
-
-	@BeforeAll
-	static void init() {
-		messageBuilder = MessageBuilder.messageBuilder();
 	}
 
 	@Test
