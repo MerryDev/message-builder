@@ -1,5 +1,6 @@
 package net.quantrax.messagebuilder;
 
+import net.quantrax.messagebuilder.util.Provider;
 import net.quantrax.messagebuilder.util.Services;
 
 import java.util.Optional;
