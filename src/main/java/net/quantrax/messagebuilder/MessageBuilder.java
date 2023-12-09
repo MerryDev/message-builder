@@ -10,6 +10,8 @@ public interface MessageBuilder {
 		return MessageBuilderImpl.Instances.INSTANCE;
 	}
 
+	void setup();
+
 	@NotNull LanguageStage language(@NotNull Language language);
 
 	@NotNull LanguageStage localized(@NotNull Player player);
