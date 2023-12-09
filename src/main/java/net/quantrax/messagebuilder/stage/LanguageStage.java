@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.quantrax.messagebuilder.Language;
 import net.quantrax.messagebuilder.Message;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,11 +20,6 @@ public class LanguageStage extends Resolver {
 
 	public @NotNull Component message(@NotNull String messageKey) {
 		return resolve(messageKey, language, this.localizedMessages);
-	}
-
-	@ApiStatus.Internal
-	public Language language() {
-		return this.language;
 	}
 
 }

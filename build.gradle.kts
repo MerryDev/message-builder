@@ -18,18 +18,8 @@ dependencies {
 
     implementation("de.chojo.sadu:sadu:1.4.0")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.3.1")
-
-    implementation("com.github.seeseemelk:MockBukkit-v1.20:3.58.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-}
-
-tasks {
-    test {
-        useJUnitPlatform()
-    }
 }
