@@ -1,5 +1,3 @@
-import io.freefair.gradle.plugins.lombok.LombokPlugin
-
 plugins {
     java
     `java-library`
@@ -12,9 +10,12 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     mavenLocal()
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
+
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
