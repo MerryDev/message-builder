@@ -33,6 +33,7 @@ public class MessageBuilderTest {
 	@AfterEach
 	void tearDown() {
 		MockBukkit.unmock();
+		messageBuilder.destroy();
 	}
 
 	@Test
