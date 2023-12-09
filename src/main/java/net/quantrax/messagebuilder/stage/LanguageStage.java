@@ -16,7 +16,7 @@ public class LanguageStage extends Resolver {
 	private final List<Message> localizedMessages;
 
 	public MessageStage messaging(@NotNull String messageKey) {
-		return new MessageStage(messageKey);
+		return new MessageStage(messageKey, this.language, this.localizedMessages);
 	}
 
 	public @NotNull Component message(@NotNull String messageKey) {
