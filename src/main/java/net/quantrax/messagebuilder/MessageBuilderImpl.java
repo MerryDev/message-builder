@@ -12,8 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class MessageBuilderImpl implements MessageBuilder {
@@ -24,10 +23,7 @@ public class MessageBuilderImpl implements MessageBuilder {
 	@ApiStatus.Internal
 	private HikariDataSource hikariDataSource;
 
-	@Override
-	public @NotNull LanguageStage language(@NotNull Language language) {
-		return new LanguageStage(language);
-	}
+	private final Map<Language, List<Message>> localizedMessages = new HashMap<>();
 
 	@Override
 	public void setup() {
@@ -45,6 +41,7 @@ public class MessageBuilderImpl implements MessageBuilder {
 			);
 
 			this.hikariDataSource = StaticSaduLoader.start(credentials);
+			this.fetchMessages();
 
 		} catch (IOException exception) {
 			LOGGER.severe("Could not load config.properties file. MessageBuilder will not work.");
@@ -57,10 +54,27 @@ public class MessageBuilderImpl implements MessageBuilder {
 	}
 
 	@Override
+	public @NotNull LanguageStage language(@NotNull Language language) {
+		return new LanguageStage(language);
+	}
+
+	@Override
 	public @NotNull LanguageStage localized(@NotNull Player player) {
 		final Language suitableLanguage = Language.fromLocale(player.locale());
 
 		return new LanguageStage(suitableLanguage);
+	}
+
+	private void fetchMessages() {
+		for (Language language : Language.values()) {
+			Language.messages(language)
+					.whenComplete((messages, $) -> this.localizedMessages.putIfAbsent(language, messages))
+					.exceptionally(throwable -> {
+						LOGGER.severe(throwable.getLocalizedMessage());
+						return Collections.emptyList();
+					});
+
+		}
 	}
 
 	static final class Instances {
