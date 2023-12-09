@@ -16,7 +16,8 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    implementation("com.github.seeseemelk:MockBukkit-v1.20:3.58.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
