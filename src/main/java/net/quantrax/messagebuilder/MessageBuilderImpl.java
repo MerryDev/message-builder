@@ -1,27 +1,28 @@
 package net.quantrax.messagebuilder;
 
-import net.quantrax.messagebuilder.backend.database.Properties;
+import com.zaxxer.hikari.HikariDataSource;
+import net.quantrax.messagebuilder.backend.database.Credentials;
 import net.quantrax.messagebuilder.backend.database.StaticSaduLoader;
 import net.quantrax.messagebuilder.stage.LanguageStage;
 import net.quantrax.messagebuilder.util.Provider;
 import net.quantrax.messagebuilder.util.Services;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.tomlj.Toml;
-import org.tomlj.TomlParseResult;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
+import java.io.InputStream;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 public class MessageBuilderImpl implements MessageBuilder {
+
 	private static final Logger LOGGER = Logger.getLogger(MessageBuilderImpl.class.getName());
 	private static final Optional<Provider> SERVICE = Services.service(Provider.class);
+
+	@ApiStatus.Internal
+	private HikariDataSource hikariDataSource;
 
 	@Override
 	public @NotNull LanguageStage language(@NotNull Language language) {
@@ -30,29 +31,29 @@ public class MessageBuilderImpl implements MessageBuilder {
 
 	@Override
 	public void setup() {
-		try {
-			final URL url = getClass().getResource("config.toml");
-			if (url == null) throw new RuntimeException("Could not load config.toml file. MessageBuilder will not work.");
+		final Properties properties = new Properties();
+		try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("config.properties")) {
+			properties.load(input);
 
-			final Path source = Paths.get(url.toURI());
-			final TomlParseResult result = Toml.parse(source);
-
-			result.errors().forEach(error -> LOGGER.severe(error.getLocalizedMessage())); // Log possible errors during parsing
-
-			final Map<String, Object> credentials = result.toMap();
-			final Properties properties = new Properties(
-					credentials.get("host").toString(),
-					credentials.get("port").toString(),
-					credentials.get("database").toString(),
-					credentials.get("username").toString(),
-					credentials.get("password").toString()
+			if (properties.isEmpty()) throw new IllegalStateException("Could not read config.properties. Using default credentials");
+			final Credentials credentials = new Credentials(
+					properties.getProperty("host", "localhost"),
+					properties.getProperty("port", "3306"),
+					properties.getProperty("database", "language"),
+					properties.getProperty("user", "root"),
+					properties.getProperty("password", "")
 			);
 
-			StaticSaduLoader.start(properties);
+			this.hikariDataSource = StaticSaduLoader.start(credentials);
 
-		} catch (URISyntaxException | IOException exception) {
-			LOGGER.severe("Could not get proper information from config.toml. Check the config syntax and the path to the file.");
+		} catch (IOException exception) {
+			LOGGER.severe("Could not load config.properties file. MessageBuilder will not work.");
 		}
+	}
+
+	@Override
+	public void destroy() {
+		this.hikariDataSource.close();
 	}
 
 	@Override
@@ -63,8 +64,6 @@ public class MessageBuilderImpl implements MessageBuilder {
 	}
 
 	static final class Instances {
-		static final MessageBuilder INSTANCE = SERVICE
-				.map(Provider::messageBuilder)
-				.orElseGet(MessageBuilderImpl::new);
+		static final MessageBuilder INSTANCE = SERVICE.map(Provider::messageBuilder).orElseGet(MessageBuilderImpl::new);
 	}
 }

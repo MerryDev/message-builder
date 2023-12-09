@@ -6,12 +6,14 @@ import de.chojo.sadu.datasource.DataSourceCreator;
 
 public class StaticSaduLoader {
 
-	public static void start(Properties properties) {
+	public static HikariDataSource start(Credentials properties) {
 		final HikariDataSource source = createSource(properties);
 		StaticQueryAdapter.start(source);
+
+		return source;
 	}
 
-	private static HikariDataSource createSource(Properties properties) {
+	private static HikariDataSource createSource(Credentials properties) {
 		return DataSourceCreator.create(MariaDb.get())
 				.configure(config -> config.host(properties.host()).port(properties.port()).database(properties.database()).user(properties.username()).password(properties.password()))
 				.create()
