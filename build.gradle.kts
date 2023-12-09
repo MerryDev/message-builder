@@ -16,7 +16,6 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT")
 
-    implementation("org.tomlj:tomlj:1.1.0")
     implementation("de.chojo.sadu:sadu:1.4.0")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.3.1")
 
