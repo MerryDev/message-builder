@@ -5,6 +5,7 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -80,6 +81,26 @@ public class MessageBuilderTest {
 		final Component actual = MessageBuilder.messageBuilder().localized(player).message("test.test");
 
 		assertEquals(expected, actual, "The resolved component does not match with the expectation.");
+	}
+
+	@Test
+	void confirmManuallySentMessage() {
+		final Component expected = MiniMessage.miniMessage().deserialize("<red>Test<red>", TagResolver.standard());
+		player.sendMessage(MessageBuilder.messageBuilder().localized(player).message("test.test"));
+
+		final Component actual = player.nextComponentMessage();
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void confirmAutoSentMessage() {
+		final Component expected = MiniMessage.miniMessage().deserialize("<red>Test<red>", TagResolver.standard());
+
+		MessageBuilder.messageBuilder().localized(player).messaging("test.test").send(player);
+		final Component actual = player.nextComponentMessage();
+
+		assertEquals(expected, actual);
 	}
 
 }
