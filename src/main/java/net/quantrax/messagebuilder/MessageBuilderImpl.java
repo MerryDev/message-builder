@@ -7,7 +7,6 @@ import net.quantrax.messagebuilder.stage.LanguageStage;
 import net.quantrax.messagebuilder.util.Provider;
 import net.quantrax.messagebuilder.util.Services;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -52,14 +51,14 @@ public class MessageBuilderImpl implements MessageBuilder {
 
 	@Override
 	public @NotNull LanguageStage language(@NotNull Language language) {
-		return new LanguageStage(language);
+		return new LanguageStage(language, this.localizedMessages.getOrDefault(language, Collections.emptyList()));
 	}
 
 	@Override
 	public @NotNull LanguageStage localized(@NotNull Player player) {
 		final Language suitableLanguage = Language.fromLocale(player.locale());
 
-		return new LanguageStage(suitableLanguage);
+		return new LanguageStage(suitableLanguage, this.localizedMessages.getOrDefault(suitableLanguage, Collections.emptyList()));
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package net.quantrax.messagebuilder;
 
+import lombok.experimental.Accessors;
 import net.quantrax.messagebuilder.stage.LanguageStage;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
