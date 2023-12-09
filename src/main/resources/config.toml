@@ -1,0 +1,6 @@
+[database-credentials]
+host = "localhost"
+port = "3306"
+database = "language"
+username = "root"
+password = ""
