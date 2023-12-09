@@ -9,33 +9,22 @@ plugins {
 group = "net.quantrax"
 version = "1.0-SNAPSHOT"
 
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-    }
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-subprojects {
-    apply {
-        plugin<JavaPlugin>()
-        plugin<JavaLibraryPlugin>()
-        plugin<LombokPlugin>()
-    }
-
-    java {
-        toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-    }
-
-    tasks {
-        test {
-            useJUnitPlatform()
-        }
+tasks {
+    test {
+        useJUnitPlatform()
     }
 }
