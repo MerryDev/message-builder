@@ -43,7 +43,7 @@ Currently, we only support these two languages.
 
 ```java
 final Component message = MessageBuilder.messageBuilder().language(language).message(messageKey);
-sendMessage(message);
+player.sendMessage(message);
 ```
 <br>
 
@@ -61,7 +61,7 @@ This will retrieve the language the player is playing minecraft with and transla
 ```java
 // Message sending with explicitly defining the component
 final Component message = MessageBuilder.messageBuilder().localized(player).message(messageKey);
-sendMessage(message);
+player.sendMessage(message);
 
 // Direct message sending
 MessageBuilder.messageBuilder().localized(player).messaging(messageKey).send(player);
